@@ -4,10 +4,6 @@
 
 <h2>Índice</h2>
 
-*[Título e imagen de portada](#título-e-imagen-de-portada)
-
-*[Insignias](#insignias)
-
 *[Índice](#índice)
 
 *[Descripción del proyecto](#descripción-del-proyecto)
@@ -35,13 +31,19 @@
 <h2>Demostración de funciones y aplicaciones</h2>
 
 <h2>Acceso al Proyecto</h2>
+https://www.youtube.com/watch?v=6Cfw38qnEgw&ab_channel=Pao
 
 <h2>Tecnologías utilizadas</h2>
+<p>¡De momento hemos utilizado únicamente Java! Increible, ¿verdad? :see_no_evil: :see_no_evil:</p>
 
 <h2>Personas Contribuyentes</h2>
+<p>¡Aún no tenemos contribuciones! Envíanos tu apoyo para quedar inmortalizado en nuestro proyecto :money_with_wings: :money_with_wings:</p>
 
 <h2>Demostración de funciones y aplicaciones</h2>
+<p>:pray: En breves subiremos una demo de nuestro trabajo :pray:</p>
 
 <h2>Personas Desarrolladoras del Proyecto</h2>
+<p>Iago Blanco Cañás</p>
 
 <h2>Licencia</h2>
+<p>Derechos reservados a Iago Blanco Cañás</p>
