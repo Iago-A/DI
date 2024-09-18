@@ -43,8 +43,7 @@ https://www.youtube.com/watch?v=6Cfw38qnEgw&ab_channel=Pao
 <p>:pray: En breves subiremos una demo de nuestro trabajo :pray:</p>
 
 <h2>Personas Desarrolladoras del Proyecto</h2>
-| [<img src="https://avatars.githubusercontent.com/u/181847143?s=400&u=1dfdbd5a2821f1624465aee06a69528e15ee3616&v=4" width=115><br><sub>Iago Blanco Cañás</sub>] |
-| :---: |
+<img src="https://avatars.githubusercontent.com/u/181847143?s=400&u=1dfdbd5a2821f1624465aee06a69528e15ee3616&v=4" width=115><br><sub>Iago Blanco Cañás</sub>
 
 <h2>Licencia</h2>
 <p>Derechos reservados a Iago Blanco Cañás</p>
