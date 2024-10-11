@@ -1,5 +1,3 @@
-
-
 class Heroe:
     # Atributos
     nombre = ""
@@ -8,46 +6,60 @@ class Heroe:
     # Constructor
     def __init__(self, nombre):
         self.nombre = nombre
-        self.ataque = 20
-        self.defensa = 40
+        self.ataque = 60
+        self.defensa = 20
         self.salud = 100
         self.salud_max = 100
 
 
     # Métodos
+
+    # El usuario elige atacar
     def atacar(self, enemigo):
         dano = self.ataque - enemigo.defensa
 
-        print("Héroe ataca a" + enemigo)
+        print("\nHéroe ataca a " + enemigo.nombre)
 
-        if dano <= enemigo.defensa:
+        if dano <= enemigo.defensa: # Ataque de héroe fallido
             print("El enemigo ha bloqueado el ataque.")
-        else:
-            print("El enemigo" + enemigo + "ha recibido" + dano + "puntos de daño.")
+        else: # Ataque de héroe exitoso
+            print("El enemigo " + enemigo.nombre + " ha recibido " + str(dano) + " puntos de daño.")
+            enemigo.salud -= dano # Se reduce la salud del enemigo
+
+        return False # Héroe no se defiende, no se restaura la defensa original
 
 
+    # El usuario elige curarse
     def curarse(self):
-        cura = 20
-        self.salud = self.salud + cura
+        cura = 50
+        self.salud += cura
 
+        # Control para no curarse más de la salud máxima del héroe
         if self.salud > self.salud_max:
             self.salud = self.salud_max
 
-        print("Héroe se ha curado. Salud actual:" + str(self.salud))
+        print("\nHéroe se ha curado. Salud actual: " + str(self.salud))
+
+        return False # Héroe no se defiende, no se restaura la defensa original
 
 
+    # El usuario elige defenderse
     def defenderse(self):
-        self.defensa = self.defensa + 5
+        self.defensa += 5
 
-        print("Héroe se defiende. Defensa aumentada temporalmente a" + str(self.defensa))
+        print("\nHéroe se defiende. Defensa aumentada temporalmente a " + str(self.defensa))
+
+        return True # Héroe sí se defiende, se restaurará la defensa original después de que el enemigo ataque
 
 
+    # Se restaura la defensa original después del ataque del enemigo. solo si el usuario se defendió previamente
     def reset_defensa(self):
-        self.defensa = self.defensa - 5
+        self.defensa -= 5
 
-        print("La defensa de" + self.nombre + "vuelve a la normalidad.")
+        print("La defensa de " + self.nombre + " vuelve a la normalidad.")
 
 
+    # Se controla que el héroe siga vivo para continuar el juego o no
     def esta_vivo(self):
         vivo = True
 
