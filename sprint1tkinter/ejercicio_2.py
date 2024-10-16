@@ -10,7 +10,7 @@ def close_window():
 
 # Crear ventana
 root = tk.Tk()
-root.title = "Ejercicio 2"
+root.title("Ejercicio 2")
 root.geometry("400x250")
 
 # Primer botón

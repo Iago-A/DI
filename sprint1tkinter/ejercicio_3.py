@@ -10,7 +10,7 @@ def show_text():
 
 
 root = tk.Tk()
-root.title = "Ejercicio 3"
+root.title("Ejercicio 3")
 root.geometry("400x200")
 
 label_1 = tk.Label(root, text = "Inserte su nombre:")

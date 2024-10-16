@@ -13,7 +13,7 @@ def show_fruits():
 
 
 root = tk.Tk()
-root.title = "Ejercicio 6"
+root.title("Ejercicio 6")
 root.geometry("400x300")
 
 # Se crea la lista de opciones para la listbox

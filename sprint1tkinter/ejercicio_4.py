@@ -25,7 +25,7 @@ def show_selection():
 
 
 root = tk.Tk()
-root.title = "Ejercicio 4"
+root.title("Ejercicio 4")
 root.geometry("400x250")
 
 # Variable para checkbutton

@@ -12,7 +12,7 @@ def change_colour():
 
 
 root = tk.Tk()
-root.title = "Ejercicio 5"
+root.title("Ejercicio 5")
 root.geometry("400x200")
 
 # Crear variable para radiobuttons
