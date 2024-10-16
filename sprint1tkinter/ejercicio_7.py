@@ -1,25 +1,20 @@
 import tkinter as tk
 
 def show_oval():
-    # Obtener datos de los entrys
-    coordinates1 = entry1.get()
-    coordinates2 = entry2.get()
-
-    # Dividir el texto usando la coma como separador
-    x1_str, y1_str = coordinates1.split(",")
-    x2_str, y2_str = coordinates2.split(",")
-
-    # Convertir String anteriiores a enteros
-    x1 = int(x1_str)
-    y1 = int(y1_str)
-    x2 = int(x2_str)
-    y2 = int(y2_str)
+    x1, y1, x2, y2 = obtain_data()
 
     # Dibujar formas dentro del canvas
     canvas.create_oval(x1, y1, x2, y2, outline = "red")
 
 
 def show_rectangle():
+    x1, y1, x2, y2 = obtain_data()
+
+    # Dibujar formas dentro del canvas
+    canvas.create_rectangle(x1, y1, x2, y2, outline = "blue", width = 1)
+
+
+def obtain_data():
     # Obtener datos de los entrys
     coordinates1 = entry1.get()
     coordinates2 = entry2.get()
@@ -34,8 +29,7 @@ def show_rectangle():
     x2 = int(x2_str)
     y2 = int(y2_str)
 
-    # Dibujar formas dentro del canvas
-    canvas.create_rectangle(x1, y1, x2, y2, outline = "blue", width = 1)
+    return x1, y1, x2, y2
 
 
 root = tk.Tk()
