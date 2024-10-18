@@ -4,7 +4,6 @@ def update_value(value):
     label.config(text = "Valor: " + value)
 
 
-
 root = tk.Tk()
 root.title("Ejercicio 11")
 root.geometry("400x200")
