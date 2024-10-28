@@ -1,7 +1,7 @@
 import tkinter as tk
-from modelo import Modelo
-from vista import Vista
-from controlador import Controlador
+from modelo_notas import Modelo
+from vista_notas import Vista
+from controlador_notas import Controlador
 
 def main():
     root = tk.Tk()
