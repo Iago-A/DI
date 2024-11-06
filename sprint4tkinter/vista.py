@@ -34,7 +34,22 @@ class GameView:
 
 class MainMenu:
     def __init__(self, root, start_game_callback, show_stats_callback, quit_callback):
-        pass
+        self.root = root
+        self.root.title("Juego de memoria")
+        self.root.geometry("400x600")
+
+        # Barra de menú principal
+        main_menu = tk.Menu(root)
+        root.config(menu=main_menu)
+
+        # Casilla opciones
+        options_menu = tk.Menu(main_menu, tearoff=0) # Variable para la casilla
+        main_menu.add_cascade(label="Opciones", menu=options_menu)
+        options_menu.add_command(label="Jugar", command="")
+        options_menu.add_separator()
+        options_menu.add_command(label="Estadísticas", command="")
+        options_menu.add_separator()
+        options_menu.add_command(label="Salir", command="")
 
 
     def ask_player_name(self):

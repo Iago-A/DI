@@ -7,10 +7,10 @@ from vista import GameView
 
 def main():
     root = tk.Tk()
-    model = GameModel()
-    main_menu = MainMenu(root)
-    game_view = GameView(root)
-    controller = GameController(model, main_menu, game_view)
+    model = GameModel("Easy", "Iago")
+    main_menu = MainMenu(root, start_game_callback, show_stats_callback, quit_callback)
+    game_view = GameView(on_card_click_callback, update_move_count_callback, update_time_callback)
+    controller = GameController(model)
 
     root.mainloop()
 
