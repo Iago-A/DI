@@ -2,8 +2,16 @@ import tkinter as tk
 import time
 
 class GameController:
-    def __init__(self, root):
-        pass
+    def __init__(self, root, model, main_menu, game_view):
+        self.root = root
+        self.model = model
+        self.main_menu = main_menu
+        self.game_view = game_view
+
+        # Enlazar los botones del menú principal de vista con los métodos de este fichero
+        self.main_menu.start_game_callback = self.start_game
+        self.main_menu.show_stats_callback = self.show_stats
+        self.main_menu.quit_callback = self.quit_game
 
 
     def show_difficulty_selection(self):
@@ -11,7 +19,7 @@ class GameController:
 
 
     def start_game(self, difficulty):
-        pass
+        print("Juego iniciado")
 
 
     def show_loading_window(self, message):
@@ -49,5 +57,8 @@ class GameController:
     def update_time(self):
         pass
 
+
+    def quit_game(self):
+        quit()
 
     
