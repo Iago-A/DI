@@ -15,11 +15,16 @@ class GameModel:
 
 
     def _generate_board(self):
-        pass
+        if self.difficulty == "fácil":
+            pass
+        elif self.difficulty == "medio":
+            pass
+        else:
+            pass
 
 
     def _load_images(self):
-        pass
+        descargar_imagen()
 
 
     def images_are_loaded(self):

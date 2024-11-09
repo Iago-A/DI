@@ -1,5 +1,7 @@
 import tkinter as tk
 import time
+from tkinter import simpledialog
+
 
 class GameController:
     def __init__(self, root, model, main_menu, game_view):
@@ -8,18 +10,28 @@ class GameController:
         self.main_menu = main_menu
         self.game_view = game_view
 
-        # Enlazar los botones del menú principal de vista con los métodos de este fichero
-        self.main_menu.start_game_callback = self.start_game
-        self.main_menu.show_stats_callback = self.show_stats
-        self.main_menu.quit_callback = self.quit_game
+        # Enlazamos los callbacks del controlador al menú principal
+        self.main_menu.set_callbacks(self.start_game, self.show_stats, self.quit_game)
 
 
     def show_difficulty_selection(self):
-        pass
+        difficulty = simpledialog.askstring("Seleccione la dificultad","Ingrese la dificultad (fácil, medio, difícil):", parent=self.root)
+        if len(difficulty) > 0:
+            if difficulty == "fácil" or difficulty == "medio" or difficulty == "difícil":
+                # Se cambian los atributos dificultad y nombre 'hardcodeados' en el main
+                self.model.difficulty = difficulty
+                self.model.player_name = self.main_menu.ask_player_name()
+                print(f"Dificultad {self.model.difficulty} nombre {self.model.player_name}")
+            else:
+                print("Dificultad no válida")
+        else:
+            print("No se seleccionó ninguna dificultad")
 
 
-    def start_game(self, difficulty):
-        print("Juego iniciado")
+    def start_game(self):
+        difficulty = self.model.difficulty
+
+        self.show_difficulty_selection()
 
 
     def show_loading_window(self, message):
@@ -51,7 +63,7 @@ class GameController:
 
 
     def show_stats(self):
-        pass
+        print("Aquí saldrían unas estadísticas de la leche")
 
 
     def update_time(self):
@@ -59,6 +71,6 @@ class GameController:
 
 
     def quit_game(self):
-        quit()
+        self.root.quit()
 
     
