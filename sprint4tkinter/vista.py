@@ -11,7 +11,25 @@ class GameView:
         self.update_time_callback = update_time_callback
 
     def create_board(self, model):
-        pass
+        self.root = tk.Tk()
+        self.root.title("Partida")
+        self.root.geometry("500x500")
+
+        # Usa el tamaño de la celda para calcular la posición de cada carta
+        cell_size = model.cell_size
+        filas = 2
+        columnas = len(model.board[0])
+
+        for i in range(filas):
+            for j in range(columnas):
+                carta = model.board[i][j]
+                img = model.images[carta]  # Obtiene la imagen correspondiente
+
+                if img:  # Verifica que la imagen haya sido cargada
+                    label = tk.Label(self.root, image=img, width=cell_size, height=cell_size)
+                    label.grid(row=i, column=j, padx=5, pady=5)
+                    self.labels[(i, j)] = label
+
 
     def update_board(self, pos, image_id):
         pass
@@ -45,16 +63,20 @@ class MainMenu:
         self.exit_button = tk.Button(self.root, text="Salir")
         self.exit_button.pack(pady=10)
 
+
     def set_callbacks(self, start_game_callback, show_stats_callback, quit_callback):
         # Asignamos los callbacks a cada botón
         self.play_button.config(command=start_game_callback)
         self.stats_button.config(command=show_stats_callback)
         self.exit_button.config(command=quit_callback)
 
+
     def ask_player_name(self):
         player_name = simpledialog.askstring("Nombre jugador", "Inserte nombre:", parent=self.root)
         print(f"Nombre del jugador: {player_name}")
         return player_name
 
+
     def show_stats(self, stats):
         pass
+
