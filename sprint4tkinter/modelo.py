@@ -1,5 +1,6 @@
 import random
 import threading
+import time
 
 from recursos import descargar_imagen
 
@@ -11,6 +12,9 @@ class GameModel:
         self.cell_size = cell_size
         self.board = [] # Aquí se guarda el tablero
         self.images = {}  # Diccionario para almacenar las imágenes descargadas
+        self.start_time = None  # Variable para almacenar la hora de inicio del juego
+        self.elapsed_time = 0
+        self.timer_running = False
 
 
     # Se establece el número de pares de cartas según la dificultad
@@ -45,6 +49,7 @@ class GameModel:
         for fila in self.board:
             print(fila)
 
+
     def _load_images(self):
         size = 50
         urls = {
@@ -60,7 +65,6 @@ class GameModel:
             "imagen_10": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/rey%20picas.jpg?raw=true",
         }
 
-
         def load_images_thread():
             for clave, url in urls.items():
 
@@ -73,7 +77,15 @@ class GameModel:
 
 
     def start_timer(self):
-        pass
+        self.start_time = time.time()  # Guarda el tiempo actual como inicio
+        self.timer_running = True
+
+
+    def update_time(self):
+        if self.timer_running:
+            # Calcula el tiempo transcurrido
+            self.elapsed_time = time.time() - self.start_time
+        return self.elapsed_time
 
 
     def get_time(self):

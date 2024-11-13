@@ -11,15 +11,26 @@ class GameView:
         self.update_move_count_callback = update_move_count_callback
         self.update_time_callback = update_time_callback
 
+
+    def set_callbacks(self, on_card_click_callback, update_move_count_callback, update_time_callback):
+        self.on_card_click_callback = on_card_click_callback
+        self.update_move_count_callback = update_move_count_callback
+        self.update_time_callback = update_time_callback
+
+
     def create_board(self, model):
         self.ventana = tk.Toplevel()
         self.ventana.title("Partida")
         self.ventana.geometry("500x500")
 
+
         # Usa el tamaño de la celda para calcular la posición de cada carta
         cell_size = model.cell_size
         filas = 2
         columnas = len(model.board[0])
+
+        i = 0
+        j = 0
 
         for i in range(filas):
             for j in range(columnas):
@@ -31,7 +42,14 @@ class GameView:
                     label.grid(row=i, column=j, padx=5, pady=5)
                     self.labels[(i, j)] = label
 
-        
+                    # Asociar clic izquierdo del mouse a cada label
+                    label.bind("<Button-1>", lambda event, pos=(i, j): self.on_card_click_callback(event, pos))
+
+        self.label_movimientos = tk.Label(self.ventana, text="Movimientos: 0")
+        self.label_movimientos.grid(row=i+1, column=0, padx=5, pady=5)
+
+        self.label_tiempo = tk.Label(self.ventana, text="Tiempo: 0")
+        self.label_tiempo.grid(row=i+1, column=j, padx=5, pady=5)
 
 
     def update_board(self, pos, image_id):
@@ -44,7 +62,7 @@ class GameView:
         pass
 
     def update_time(self, time):
-        pass
+        self.label_tiempo.config(text=f"Tiempo: {int(time)}")
 
     def destroy(self):
         pass

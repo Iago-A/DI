@@ -9,10 +9,13 @@ class GameController:
         self.main_menu = main_menu
         self.game_view = game_view
         self.loading_window = None # Esta variable es para almacenar la ventana de carga y poder destruirla después.
+        self.selected = None # Variable para almacenar la posición de la carta clicada
 
         # Enlazamos los callbacks del controlador al menú principal
         self.main_menu.set_callbacks(self.start_game, self.show_stats, self.quit_game)
 
+        # Enlazamos los callbacks del controlador al game view
+        self.game_view.set_callbacks(self.on_card_click, self.update_move_count, self.update_time)
 
     def show_difficulty_selection(self):
         difficulty = simpledialog.askstring("Seleccione la dificultad","Ingrese la dificultad (fácil, medio, difícil):", parent=self.root)
@@ -68,8 +71,24 @@ class GameController:
         self.game_view.create_board(self.model)  # Crea el tablero
 
 
-    def on_card_click(self, pos):
-        pass
+    def on_card_click(self, event, pos):
+        print(f"Carta seleccionada en posición: {pos}")
+        # Guardar posición de la carta el self.selected
+        self.selected = pos
+
+        if not self.model.timer_running:
+            self.model.start_timer()
+
+        # Actualiza el tiempo
+        self.update_time()
+        self.root.after(1000, self.update_time_continuously)  # Luego continuar actualizando cada 1000 ms
+
+
+    def update_time_continuously(self):
+        self.update_time()  # Llama a la función de actualización del label del tiempo
+
+        # Después de 1000 ms, vuelve a llamar a esta misma función para seguir actualizando el tiempo
+        self.root.after(1000, self.update_time_continuously)
 
 
     def handle_card_selection(self):
@@ -77,7 +96,7 @@ class GameController:
 
 
     def update_move_count(self, moves):
-        pass
+        print(f"Movimientos actualizados: {moves}")
 
 
     def check_game_complete(self):
@@ -93,7 +112,11 @@ class GameController:
 
 
     def update_time(self):
-        pass
+        # Llama a model.update_time() para obtener el tiempo transcurrido
+        elapsed_time = self.model.update_time()
+
+        # Actualiza el tiempo en la vista
+        self.game_view.update_time(elapsed_time)
 
 
     def quit_game(self):
