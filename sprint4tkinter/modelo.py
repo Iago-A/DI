@@ -1,4 +1,5 @@
 import random
+import threading
 
 from recursos import descargar_imagen
 
@@ -10,9 +11,6 @@ class GameModel:
         self.cell_size = cell_size
         self.board = [] # Aquí se guarda el tablero
         self.images = {}  # Diccionario para almacenar las imágenes descargadas
-        self.images_loaded = False  # Flag para saber si las imágenes están cargadas
-        self.total_images = 10  # Total de imágenes que necesitamos cargar
-        self.loaded_images = 0  # Contador de imágenes descargadas
 
 
     # Se establece el número de pares de cartas según la dificultad
@@ -48,7 +46,7 @@ class GameModel:
             print(fila)
 
     def _load_images(self):
-        size = 300
+        size = 50
         urls = {
             "imagen_1": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/10%20picas.jpg?raw=true",
             "imagen_2": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/2%20treboles.jpg?raw=true",
@@ -62,21 +60,16 @@ class GameModel:
             "imagen_10": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/rey%20picas.jpg?raw=true",
         }
 
-        # Función callback que se llama cuando una imagen se descarga
-        def on_image_loaded(imagen_tk):
-            self.images[nombre] = imagen_tk  # Guardamos la imagen descargada en el diccionario
-            self.loaded_images += 1  # Aumentamos el contador de imágenes cargadas
-            if self.loaded_images == self.total_images:
-                self.images_are_loaded()  # Si todas están cargadas, marcamos como cargadas
 
-        # Descargamos las imágenes y pasamos el callback
-        for nombre, url in urls.items():
-            self.images[nombre] = descargar_imagen(url, size, on_image_loaded)
+        def load_images_thread():
+            for clave, url in urls.items():
+
+                self.images[clave] =  descargar_imagen(url,(size,size))
+        threading.Thread(target = load_images_thread(), daemon = True).start()
 
 
     def images_are_loaded(self):
         print("Descarga de imágenes completada")
-        self.images_loaded = True  # Cuando las imágenes estén descargadas, actualizamos el flag
 
 
     def start_timer(self):

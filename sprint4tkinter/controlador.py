@@ -1,5 +1,4 @@
 import tkinter as tk
-import time
 from tkinter import simpledialog
 
 
@@ -42,12 +41,12 @@ class GameController:
             self.model._generate_board()
             self.show_loading_window("Cargando...")
 
-            # self.model._load_images()
-            # self.check_images_loaded() # Se destruye la ventana de carga
+            self.model._load_images()
+            self.check_images_loaded() # Se destruye la ventana de carga
 
             # Usa after para cargar las imágenes de forma asíncrona y eliminar la ventana de carga cuando estén listas.
-            self.root.after(1000, self.model._load_images)  # Llama a _load_images después de 1000 ms.
-            self.root.after(2000, self.check_images_loaded)  # Comprueba si las imágenes se cargaron y cierra la ventana de carga.
+            # self.root.after(1000, self.model._load_images)  # Llama a _load_images después de 1000 ms.
+            # self.root.after(2000, self.check_images_loaded)  # Comprueba si las imágenes se cargaron y cierra la ventana de carga.
 
         else:
             print("El juego no se pudo iniciar.")
@@ -62,12 +61,11 @@ class GameController:
 
         self.loading_window.update()  # Actualiza para que se muestre de inmediato
 
+
     def check_images_loaded(self):
-        if self.model.images_loaded:  # Si las imágenes están cargadas
-            self.loading_window.destroy()
-            self.game_view.create_board(self.model)  # Crea el tablero
-        else:
-            self.root.after(1000, self.check_images_loaded)  # Si no están cargadas, vuelve a comprobar
+        print("Todas las imágenes descargadas.")
+        self.loading_window.destroy()
+        self.game_view.create_board(self.model)  # Crea el tablero
 
 
     def on_card_click(self, pos):

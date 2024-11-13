@@ -4,16 +4,17 @@ from tkinter import simpledialog
 
 class GameView:
     def __init__(self, on_card_click_callback, update_move_count_callback, update_time_callback):
-        self.root = None
+        self.ventana = None
         self.labels = {}
+        self.images = {}  # Diccionario para almacenar referencias a las imágenes
         self.on_card_click_callback = on_card_click_callback
         self.update_move_count_callback = update_move_count_callback
         self.update_time_callback = update_time_callback
 
     def create_board(self, model):
-        self.root = tk.Tk()
-        self.root.title("Partida")
-        self.root.geometry("500x500")
+        self.ventana = tk.Toplevel()
+        self.ventana.title("Partida")
+        self.ventana.geometry("500x500")
 
         # Usa el tamaño de la celda para calcular la posición de cada carta
         cell_size = model.cell_size
@@ -23,12 +24,14 @@ class GameView:
         for i in range(filas):
             for j in range(columnas):
                 carta = model.board[i][j]
-                img = model.images[carta]  # Obtiene la imagen correspondiente
+                img = model.images.get(carta)  # Obtiene la imagen correspondiente
 
                 if img:  # Verifica que la imagen haya sido cargada
-                    label = tk.Label(self.root, image=img, width=cell_size, height=cell_size)
+                    label = tk.Label(self.ventana, image=img, width=cell_size, height=cell_size)
                     label.grid(row=i, column=j, padx=5, pady=5)
                     self.labels[(i, j)] = label
+
+        
 
 
     def update_board(self, pos, image_id):
