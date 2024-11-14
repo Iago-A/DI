@@ -53,6 +53,7 @@ class GameModel:
     def _load_images(self):
         size = 50
         urls = {
+            "imagen_0": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/cartas_oculta.jpg?raw=true",
             "imagen_1": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/10%20picas.jpg?raw=true",
             "imagen_2": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/2%20treboles.jpg?raw=true",
             "imagen_3": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/3%20diamantes.jpg?raw=true",

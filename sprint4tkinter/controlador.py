@@ -9,7 +9,8 @@ class GameController:
         self.main_menu = main_menu
         self.game_view = game_view
         self.loading_window = None # Esta variable es para almacenar la ventana de carga y poder destruirla después.
-        self.selected = None # Variable para almacenar la posición de la carta clicada
+        self.selected = [] # Variable para almacenar la posición de las carta clicadas
+        self.moves = 0
 
         # Enlazamos los callbacks del controlador al menú principal
         self.main_menu.set_callbacks(self.start_game, self.show_stats, self.quit_game)
@@ -71,10 +72,26 @@ class GameController:
         self.game_view.create_board(self.model)  # Crea el tablero
 
 
-    def on_card_click(self, event, pos):
-        print(f"Carta seleccionada en posición: {pos}")
+    def on_card_click(self, event, position):
+        print(f"Carta seleccionada en posición: {position}")
+
+        # Evitar seleccionar la misma carta dos veces
+        if position in self.selected:
+            return
+
+        # Actualizar contador movimientos
+        self.update_move_count()
+
         # Guardar posición de la carta el self.selected
-        self.selected = pos
+        self.selected.append(position)
+
+        # Mostramos la imagen de la carta seleccionada temporalmente
+        carta = self.model.board[position[0]][position[1]]
+        self.game_view.update_board(position, self.model.images[carta])
+
+        # Si hay dos cartas seleccionadas, comprobamos si hay coincidencia
+        if len(self.selected) == 2:
+            self.handle_card_selection()
 
         if not self.model.timer_running:
             self.model.start_timer()
@@ -92,11 +109,28 @@ class GameController:
 
 
     def handle_card_selection(self):
-        pass
+        # Extraer las posiciones seleccionadas
+        pos1, pos2 = self.selected
+
+        # Obtener las cartas en las posiciones seleccionadas
+        carta1 = self.model.board[pos1[0]][pos1[1]]
+        carta2 = self.model.board[pos2[0]][pos2[1]]
+
+        # Comprobamos si las cartas coinciden
+        if carta1 == carta2:
+            # Las cartas coinciden, las dejamos descubiertas
+            print("¡Coincidencia!")
+            self.selected = []  # Reiniciamos las seleccionadas
+        else:
+            # Las cartas no coinciden, las ocultamos después de un breve retraso
+            self.game_view.ventana.after(1000, lambda: self.game_view.reset_cards(pos1, pos2))
+            self.selected = []  # Reiniciamos las seleccionadas
 
 
-    def update_move_count(self, moves):
-        print(f"Movimientos actualizados: {moves}")
+    def update_move_count(self):
+        self.moves += 1
+        print(f"Movimientos actualizados: {self.moves}")
+        self.game_view.update_move(self.moves)
 
 
     def check_game_complete(self):

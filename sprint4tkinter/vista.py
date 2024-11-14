@@ -6,7 +6,7 @@ class GameView:
     def __init__(self, on_card_click_callback, update_move_count_callback, update_time_callback):
         self.ventana = None
         self.labels = {}
-        self.images = {}  # Diccionario para almacenar referencias a las imágenes
+        self.images = {} # Diccionario para almacenar referencias a las imágenes
         self.on_card_click_callback = on_card_click_callback
         self.update_move_count_callback = update_move_count_callback
         self.update_time_callback = update_time_callback
@@ -23,6 +23,10 @@ class GameView:
         self.ventana.title("Partida")
         self.ventana.geometry("500x500")
 
+        # Cargar las imágenes desde el modelo
+        self.images = model.images  # Copia el diccionario de imágenes del modelo
+
+        hidden_image = self.images["imagen_0"]
 
         # Usa el tamaño de la celda para calcular la posición de cada carta
         cell_size = model.cell_size
@@ -35,15 +39,13 @@ class GameView:
         for i in range(filas):
             for j in range(columnas):
                 carta = model.board[i][j]
-                img = model.images.get(carta)  # Obtiene la imagen correspondiente
 
-                if img:  # Verifica que la imagen haya sido cargada
-                    label = tk.Label(self.ventana, image=img, width=cell_size, height=cell_size)
-                    label.grid(row=i, column=j, padx=5, pady=5)
-                    self.labels[(i, j)] = label
+                label = tk.Label(self.ventana, image=hidden_image, width=cell_size, height=cell_size)
+                label.grid(row=i, column=j, padx=5, pady=5)
+                self.labels[(i, j)] = label
 
-                    # Asociar clic izquierdo del mouse a cada label
-                    label.bind("<Button-1>", lambda event, pos=(i, j): self.on_card_click_callback(event, pos))
+                # Asociar clic izquierdo del mouse a cada label
+                label.bind("<Button-1>", lambda event, pos=(i, j): self.on_card_click_callback(event, pos))
 
         self.label_movimientos = tk.Label(self.ventana, text="Movimientos: 0")
         self.label_movimientos.grid(row=i+1, column=0, padx=5, pady=5)
@@ -52,14 +54,17 @@ class GameView:
         self.label_tiempo.grid(row=i+1, column=j, padx=5, pady=5)
 
 
-    def update_board(self, pos, image_id):
-        pass
+    def update_board(self, position, image_id):
+        label = self.labels[position]
+        label.config(image=image_id)
+
 
     def reset_cards(self, pos1, pos2):
-        pass
+        self.update_board(pos1, self.images["imagen_0"])
+        self.update_board(pos2, self.images["imagen_0"])
 
     def update_move(self, moves):
-        pass
+        self.label_movimientos.config(text=f"Movimientos: {moves}")
 
     def update_time(self, time):
         self.label_tiempo.config(text=f"Tiempo: {int(time)}")
