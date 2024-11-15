@@ -24,34 +24,35 @@ class GameView:
         self.ventana.geometry("")
 
         # Cargar las imágenes desde el modelo
-        self.images = model.images  # Copia el diccionario de imágenes del modelo
-
+        self.images = model.images
         hidden_image = self.images["imagen_0"]
 
-        # Usa el tamaño de la celda para calcular la posición de cada carta
+        # Tamaño del tablero
+        size = len(model.board)
         cell_size = model.cell_size
-        filas = 2
-        columnas = len(model.board[0])
 
-        i = 0
-        j = 0
-
-        for i in range(filas):
-            for j in range(columnas):
+        # Crear las etiquetas para las cartas
+        for i in range(size):
+            for j in range(size):
                 carta = model.board[i][j]
 
-                label = tk.Label(self.ventana, image=hidden_image, width=cell_size, height=cell_size)
+                if carta == "vacio":
+                    # Crear un espacio vacío (label sin imagen ni interacción)
+                    label = tk.Label(self.ventana, width=cell_size, height=cell_size)
+                else:
+                    # Crear una carta interactiva
+                    label = tk.Label(self.ventana, image=hidden_image, width=cell_size, height=cell_size)
+                    # Asociar clic izquierdo del mouse a cada label
+                    label.bind("<Button-1>", lambda event, pos=(i, j): self.on_card_click_callback(event, pos))
+
                 label.grid(row=i, column=j, padx=5, pady=5)
                 self.labels[(i, j)] = label
 
-                # Asociar clic izquierdo del mouse a cada label
-                label.bind("<Button-1>", lambda event, pos=(i, j): self.on_card_click_callback(event, pos))
-
         self.label_movimientos = tk.Label(self.ventana, text="Movimientos: 0")
-        self.label_movimientos.grid(row=i+1, column=0, padx=5, pady=5)
+        self.label_movimientos.grid(row=size, column=0, columnspan=size // 2, padx=5, pady=5)
 
         self.label_tiempo = tk.Label(self.ventana, text="Tiempo: 0")
-        self.label_tiempo.grid(row=i+1, column=j, padx=5, pady=5)
+        self.label_tiempo.grid(row=size, column=size // 2, columnspan=size // 2, padx=5, pady=5)
 
         self.obtener_dimensiones_reales()
         self.centrar_ventana()

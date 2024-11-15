@@ -8,7 +8,7 @@ from recursos import descargar_imagen
 
 
 class GameModel:
-    def __init__(self, difficulty, player_name, cell_size=100):
+    def __init__(self, difficulty, player_name, cell_size=70):
         self.difficulty = difficulty
         self.player_name = player_name
         self.cell_size = cell_size
@@ -26,42 +26,38 @@ class GameModel:
     # Se establece el número de pares de cartas según la dificultad
     def _generate_board(self):
         if self.difficulty == "fácil":
-            num_pares = 3
+            size = 4  # Tablero de 4x4
         elif self.difficulty == "medio":
-            num_pares = 5
+            size = 6  # Tablero de 6x6
         else:
-            num_pares = 10
+            size = 8  # Tablero de 8x8
 
-        self.total_matches = num_pares
+        total_celdas = size * size  # Total de espacios en el tablero
+        self.total_matches = total_celdas // 2  # Número total de pares necesarios
 
         cartas_disponibles = ["imagen_1", "imagen_2", "imagen_3", "imagen_4", "imagen_5",
                   "imagen_6", "imagen_7", "imagen_8", "imagen_9", "imagen_10"]
 
-        # Seleccionamos solo la cantidad de cartas necesarias según la dificultad
-        cartas_seleccionadas = cartas_disponibles[:num_pares]
+        # Si hay menos cartas únicas que parejas necesarias, se repiten las cartas
+        while len(cartas_disponibles) < self.total_matches:
+            cartas_disponibles *= 2  # Duplica las cartas disponibles
 
-        # Creamos una lista de cartas duplicadas para hacer los pares
-        cartas = cartas_seleccionadas * 2  # Cada carta aparece dos veces
+        # Seleccionar exactamente las cartas necesarias y duplicarlas para formar parejas
+        cartas_necesarias = cartas_disponibles[:self.total_matches]
+        cartas = cartas_necesarias * 2  # Crear parejas
 
-        # Mezclamos las cartas aleatoriamente
+        # Barajar las cartas
         random.shuffle(cartas)
 
-        # Determinamos las dimensiones del tablero
-        filas = 2
-        columnas = num_pares
-
-        # Creamos las 2 filas con las cartas seleccionadas
-        self.board = []
-        for i in range(filas):
-            fila = []
-            for j in range(columnas):
-                valor = cartas.pop(0)  # Obtén el siguiente valor para la carta
-                fila.append({"value": valor, "matched": False})  # Usamos un diccionario para cada carta
-            self.board.append(fila)
+        # Crear el tablero como una matriz de tamaño adecuado
+        self.board = [
+            [{"value": carta, "matched": False} for carta in cartas[i * size:(i + 1) * size]]
+            for i in range(size)
+        ]
 
 
     def _load_images(self):
-        size = 100
+        size = 70
         urls = {
             "imagen_0": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/cartas_oculta.jpg?raw=true",
             "imagen_1": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/10%20picas.jpg?raw=true",
