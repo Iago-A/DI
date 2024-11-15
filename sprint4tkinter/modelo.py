@@ -1,6 +1,8 @@
 import random
 import threading
 import time
+import os
+from datetime import datetime
 
 from recursos import descargar_imagen
 
@@ -15,6 +17,10 @@ class GameModel:
         self.start_time = None  # Variable para almacenar la hora de inicio del juego
         self.elapsed_time = 0
         self.timer_running = False
+        self.moves = 0
+        self.total_matches = 0 # Variable de aciertos necesarios para terminar
+        self.currently_matches = 0
+        self.score_file = "ranking.txt" # Fichero de estadísticas
 
 
     # Se establece el número de pares de cartas según la dificultad
@@ -25,6 +31,8 @@ class GameModel:
             num_pares = 5
         else:
             num_pares = 10
+
+        self.total_matches = num_pares
 
         cartas_disponibles = ["imagen_1", "imagen_2", "imagen_3", "imagen_4", "imagen_5",
                   "imagen_6", "imagen_7", "imagen_8", "imagen_9", "imagen_10"]
@@ -43,15 +51,17 @@ class GameModel:
         columnas = num_pares
 
         # Creamos las 2 filas con las cartas seleccionadas
-        self.board = [cartas[i * columnas:(i + 1) * columnas] for i in range(filas)]
-
-        # Imprimir el tablero generado para comprobar
-        for fila in self.board:
-            print(fila)
+        self.board = []
+        for i in range(filas):
+            fila = []
+            for j in range(columnas):
+                valor = cartas.pop(0)  # Obtén el siguiente valor para la carta
+                fila.append({"value": valor, "matched": False})  # Usamos un diccionario para cada carta
+            self.board.append(fila)
 
 
     def _load_images(self):
-        size = 50
+        size = 100
         urls = {
             "imagen_0": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/cartas_oculta.jpg?raw=true",
             "imagen_1": "https://github.com/Iago-A/DI/blob/main/sprint4tkinter/Cartas/10%20picas.jpg?raw=true",
@@ -73,10 +83,6 @@ class GameModel:
         threading.Thread(target = load_images_thread(), daemon = True).start()
 
 
-    def images_are_loaded(self):
-        print("Descarga de imágenes completada")
-
-
     def start_timer(self):
         self.start_time = time.time()  # Guarda el tiempo actual como inicio
         self.timer_running = True
@@ -89,17 +95,64 @@ class GameModel:
         return self.elapsed_time
 
 
-    def get_time(self):
-        pass
+    def save_score(self):
+        # Crear una estructura para almacenar puntuaciones
+        scores = {
+            "fácil": [],
+            "medio": [],
+            "difícil": [],
+        }
 
+        # Leer el archivo de puntuaciones si existe
+        if os.path.exists(self.score_file):
+            with open(self.score_file, "r") as archivo:
+                for linea in archivo:
+                    nombre, dificultad, movimientos, fecha = linea.strip().split(" | ")
+                    scores[dificultad].append({
+                        "nombre": nombre,
+                        "movimientos": int(movimientos),
+                        "fecha": fecha
+                    })
 
-    def check_match(self, pos1, pos2):
-        pass
+        # Agregar la nueva puntuación
+        nueva_puntuacion = {
+            "nombre": self.player_name,
+            "movimientos": self.moves,
+            "fecha": datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        }
+        scores[self.difficulty].append(nueva_puntuacion)
 
+        # Ordenar las puntuaciones de cada dificultad por movimientos (ascendente)
+        for dificultad in scores:
+            scores[dificultad].sort(key=lambda x: x["movimientos"])
+            # Conservar solo las tres mejores puntuaciones
+            scores[dificultad] = scores[dificultad][:3]
 
-    def is_game_complete(self):
-        pass
+        # Guardar las puntuaciones de vuelta al archivo
+        with open(self.score_file, "w") as archivo:
+            for dificultad, lista_puntuaciones in scores.items():
+                for puntuacion in lista_puntuaciones:
+                    archivo.write(
+                        f'{puntuacion["nombre"]} | {dificultad} | {puntuacion["movimientos"]} | {puntuacion["fecha"]}\n')
 
 
     def load_scores(self):
-        pass
+        # Crear una estructura para almacenar puntuaciones
+        scores = {
+            "fácil": [],
+            "medio": [],
+            "difícil": [],
+        }
+
+        # Leer el archivo de puntuaciones si existe
+        if os.path.exists(self.score_file):
+            with open(self.score_file, "r") as archivo:
+                for linea in archivo:
+                    nombre, dificultad, movimientos, fecha = linea.strip().split(" | ")
+                    scores[dificultad].append({
+                        "nombre": nombre,
+                        "movimientos": int(movimientos),
+                        "fecha": fecha
+                    })
+
+        return scores

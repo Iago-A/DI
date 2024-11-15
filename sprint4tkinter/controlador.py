@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import simpledialog
+from tkinter import messagebox
 
 
 class GameController:
@@ -10,7 +11,9 @@ class GameController:
         self.game_view = game_view
         self.loading_window = None # Esta variable es para almacenar la ventana de carga y poder destruirla después.
         self.selected = [] # Variable para almacenar la posición de las carta clicadas
-        self.moves = 0
+        self.elapsed_time = 0
+        self.timer_reference = None # Variable para el timer para poder detener el after cuando se complete la partida
+
 
         # Enlazamos los callbacks del controlador al menú principal
         self.main_menu.set_callbacks(self.start_game, self.show_stats, self.quit_game)
@@ -25,14 +28,17 @@ class GameController:
                 # Se cambian los atributos dificultad y nombre 'hardcodeados' en el main
                 self.model.difficulty = difficulty
                 self.model.player_name = self.main_menu.ask_player_name()
-                print(f"Dificultad {self.model.difficulty} nombre {self.model.player_name}")
 
-                return True
+                if len(self.model.player_name) > 0:
+                    return True
+                else:
+                    tk.messagebox.showinfo("AVISO", "No se indicó nombre de jugador.\nEl juego no se pudo iniciar.")
+                    return False
             else:
-                print("Dificultad no válida")
+                tk.messagebox.showinfo("AVISO", "La dificultad no es válida.\nEl juego no se pudo iniciar.")
                 return False
         else:
-            print("No se seleccionó ninguna dificultad")
+            tk.messagebox.showinfo("AVISO", "No se seleccionó ninguna dificultad.\nEl juego no se pudo iniciar.")
             return False
 
 
@@ -48,18 +54,11 @@ class GameController:
             self.model._load_images()
             self.check_images_loaded() # Se destruye la ventana de carga
 
-            # Usa after para cargar las imágenes de forma asíncrona y eliminar la ventana de carga cuando estén listas.
-            # self.root.after(1000, self.model._load_images)  # Llama a _load_images después de 1000 ms.
-            # self.root.after(2000, self.check_images_loaded)  # Comprueba si las imágenes se cargaron y cierra la ventana de carga.
-
-        else:
-            print("El juego no se pudo iniciar.")
-
 
     def show_loading_window(self, message):
         self.loading_window = tk.Toplevel(self.root)
         self.loading_window.title("")
-        self.loading_window.geometry("200x200")
+        self.loading_window.geometry("200x75")
         label = tk.Label(self.loading_window, text=message)
         label.pack()
 
@@ -71,22 +70,34 @@ class GameController:
         self.loading_window.destroy()
         self.game_view.create_board(self.model)  # Crea el tablero
 
+        # A continuación se reestablecen distintos parámetros para que se puedan jugar varias partidas seguidas.
+        # Todo se resetea aquí, ya que se llaman a variables que "empiezan a existir" cuando se crea el tablero unas líneas más arriba
+        # Detener temporizador previo si existiera
+        self.stop_timer()
+
+        # Reiniciar valores relacionados al tiempo
+        self.elapsed_time = 0
+        self.model.timer_running = False
+        self.game_view.update_time(self.elapsed_time)  # Actualizar la vista para mostrar
+
+        # Reiniciar valores del contador y parejas acertadas
+        self.model.moves = 0
+        self.model.currently_matches = 0
 
     def on_card_click(self, event, position):
-        print(f"Carta seleccionada en posición: {position}")
-
         # Evitar seleccionar la misma carta dos veces
         if position in self.selected:
             return
 
-        # Actualizar contador movimientos
-        self.update_move_count()
+        # Evitar interactuar con una carta ya emparejada
+        if self.model.board[position[0]][position[1]]["matched"]:
+            return
 
         # Guardar posición de la carta el self.selected
         self.selected.append(position)
 
         # Mostramos la imagen de la carta seleccionada temporalmente
-        carta = self.model.board[position[0]][position[1]]
+        carta = self.model.board[position[0]][position[1]]["value"]
         self.game_view.update_board(position, self.model.images[carta])
 
         # Si hay dos cartas seleccionadas, comprobamos si hay coincidencia
@@ -95,32 +106,56 @@ class GameController:
 
         if not self.model.timer_running:
             self.model.start_timer()
+            self.timer_reference = self.root.after(1000,self.update_time_continuously)  # Luego continuar actualizando cada 1000 ms
 
         # Actualiza el tiempo
         self.update_time()
-        self.root.after(1000, self.update_time_continuously)  # Luego continuar actualizando cada 1000 ms
+
+
+    def update_time(self):
+        # Llama a model.update_time() para obtener el tiempo transcurrido
+        self.elapsed_time = self.model.update_time()
+
+        # Actualiza el tiempo en la vista
+        self.game_view.update_time(self.elapsed_time)
 
 
     def update_time_continuously(self):
         self.update_time()  # Llama a la función de actualización del label del tiempo
 
         # Después de 1000 ms, vuelve a llamar a esta misma función para seguir actualizando el tiempo
-        self.root.after(1000, self.update_time_continuously)
+        self.timer_reference = self.root.after(1000,self.update_time_continuously)
+
+
+    def stop_timer(self):
+        if self.timer_reference is not None:
+            self.root.after_cancel(self.timer_reference)
+            self.timer_reference = None  # Resetear referencia
+            self.model.timer_running = False
 
 
     def handle_card_selection(self):
+        # Actualizar contador movimientos
+        self.update_move_count()
+
         # Extraer las posiciones seleccionadas
         pos1, pos2 = self.selected
 
         # Obtener las cartas en las posiciones seleccionadas
-        carta1 = self.model.board[pos1[0]][pos1[1]]
-        carta2 = self.model.board[pos2[0]][pos2[1]]
+        carta1 = self.model.board[pos1[0]][pos1[1]]["value"]
+        carta2 = self.model.board[pos2[0]][pos2[1]]["value"]
 
         # Comprobamos si las cartas coinciden
         if carta1 == carta2:
+            self.model.board[pos1[0]][pos1[1]]["matched"] = True
+            self.model.board[pos2[0]][pos2[1]]["matched"] = True
+
             # Las cartas coinciden, las dejamos descubiertas
-            print("¡Coincidencia!")
             self.selected = []  # Reiniciamos las seleccionadas
+
+            self.model.currently_matches += 1
+
+            self.check_game_complete()
         else:
             # Las cartas no coinciden, las ocultamos después de un breve retraso
             self.game_view.ventana.after(1000, lambda: self.game_view.reset_cards(pos1, pos2))
@@ -128,32 +163,29 @@ class GameController:
 
 
     def update_move_count(self):
-        self.moves += 1
-        print(f"Movimientos actualizados: {self.moves}")
-        self.game_view.update_move(self.moves)
+        self.model.moves += 1
+        self.game_view.update_move(self.model.moves)
 
 
     def check_game_complete(self):
-        pass
+        if self.model.currently_matches == self.model.total_matches:
+            tk.messagebox.showinfo("", f"¡Juego terminado!\nMovimientos totales = {self.model.moves}\nTiempo total = {int(self.elapsed_time)}")
+            self.stop_timer()
+            self.return_to_main_menu()
 
 
     def return_to_main_menu(self):
-        pass
+        self.model.save_score()
+        self.game_view.destroy()
+        scores = self.model.load_scores()
+        self.main_menu.show_stats(scores)
 
 
     def show_stats(self):
-        print("Aquí saldrían unas estadísticas de la leche")
-
-
-    def update_time(self):
-        # Llama a model.update_time() para obtener el tiempo transcurrido
-        elapsed_time = self.model.update_time()
-
-        # Actualiza el tiempo en la vista
-        self.game_view.update_time(elapsed_time)
+        scores = self.model.load_scores()
+        self.main_menu.show_stats(scores)
 
 
     def quit_game(self):
         self.root.quit()
 
-    
