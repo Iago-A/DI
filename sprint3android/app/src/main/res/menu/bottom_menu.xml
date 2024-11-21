@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_menu"
+        android:title="Menú principal"
+        android:icon="@drawable/home_icon"/>
+
+    <item
+        android:id="@+id/catalog_fragment"
+        android:title="Memes"
+        android:icon="@drawable/circle_icon"/>
+</menu>

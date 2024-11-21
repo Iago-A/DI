@@ -1,13 +1,13 @@
 package com.example.mycatalog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CatalogActivity extends AppCompatActivity {
     private final Context context = this;
@@ -16,14 +16,16 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
-        Button buttonToDetail = findViewById(R.id.buttonToDetail);
-        buttonToDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Cambiando actividad", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, DetailActivity.class);
-                context.startActivity(intent);
-            }
-        });
+
+        setupNavegation();
+    }
+
+    private void setupNavegation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(
+                bottomNavigationView,
+                navHostFragment.getNavController()
+        );
     }
 }
