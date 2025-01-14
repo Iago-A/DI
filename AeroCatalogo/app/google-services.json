@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712991679433",
+    "project_id": "aerocatalogo-686e4",
+    "storage_bucket": "aerocatalogo-686e4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712991679433:android:77ced0d05eb15fc4d7be18",
+        "android_client_info": {
+          "package_name": "com.example.aerocatalogo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNJ1oiMKV3y2gzKvZJlQKzyTLyveNbKBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
