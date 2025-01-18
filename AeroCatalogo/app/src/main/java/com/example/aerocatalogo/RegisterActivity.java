@@ -79,18 +79,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 databaseRef.child(uid).setValue(newUser)
                                         .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(RegisterActivity.this, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                                             finish();
                                         })
                                         .addOnFailureListener(e -> {
-                                            Toast.makeText(RegisterActivity.this, "Error al guardar datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Log.e("Firebase", "Error al guardar en la base de datos", e);
+                                            Toast.makeText(RegisterActivity.this, "Error to save data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Log.e("Firebase", "Error to save in the database", e);
                                         });
                             });
                         }
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Error al registrar usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("Firebase", "Error al registrar usuario", task.getException());
+                        Toast.makeText(RegisterActivity.this, "Error to register the user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Firebase", "Error to register the user", task.getException());
                     }
                 });
     }
