@@ -2,55 +2,53 @@ package com.example.aerocatalogo.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.aerocatalogo.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.aerocatalogo.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        findViewById(R.id.loginButton).setOnClickListener(v -> loginUser());
-        findViewById(R.id.createAccountButton).setOnClickListener(v -> createNewUser());
+        // Observadores
+        loginViewModel.getErrorMessage().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        loginViewModel.isLoginSuccessful().observe(this, isSuccessful -> {
+            if (isSuccessful != null && isSuccessful) {
+                Toast.makeText(LoginActivity.this, "Login successful.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        // Configurar botones
+        findViewById(R.id.loginButton).setOnClickListener(v -> {
+            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
+            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
+
+            // Delegar el inicio de sesión al ViewModel
+            loginViewModel.loginUser(email, password);
+        });
+
+        findViewById(R.id.createAccountButton).setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
     }
-
-    private void loginUser() {
-        String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
-        String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
-
-        // Validar campos rellenos
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please, complete all fields.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Login successful.", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Error in the authentication.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void createNewUser() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
-    }
-
 }

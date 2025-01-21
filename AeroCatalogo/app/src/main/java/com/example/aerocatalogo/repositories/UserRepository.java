@@ -42,4 +42,22 @@ public class UserRepository {
         void onSuccess();
         void onFailure(Exception e);
     }
+
+
+    public void loginUser(String email, String password, OnLoginListener listener) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onSuccess();
+                    } else {
+                        listener.onFailure(task.getException());
+                    }
+                });
+    }
+
+    public interface OnLoginListener {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
+
 }
