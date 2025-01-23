@@ -1,10 +1,13 @@
 package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.aerocatalogo.R;
 
 public class DetailActivity extends AppCompatActivity {
@@ -19,14 +22,25 @@ public class DetailActivity extends AppCompatActivity {
         String description = getIntent().getStringExtra("plane_description");
         String url = getIntent().getStringExtra("plane_url");
 
-        // Mostrar los datos en los TextViews (o donde los necesites)
+        // Obtener referencias de las vistas
         TextView titleTextView = findViewById(R.id.titleTextView);
+        ImageView imageView = findViewById(R.id.imageView);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-        TextView urlTextView = findViewById(R.id.urlTextView);
+        Button returnButton = findViewById(R.id.returnButton);
 
+        // Configurar botón de volver
+        returnButton.setOnClickListener(v -> {
+            finish();
+        });
+
+        // Asignar datos a las vistas
         titleTextView.setText(title);
         descriptionTextView.setText(description);
-        urlTextView.setText(url); // Mostrar la URL si la tienes
+
+        // Cargar la imagen con Glide
+        Glide.with(this)
+                .load(url)
+                .into(imageView);
     }
 }
 
