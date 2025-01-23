@@ -1,4 +1,4 @@
-package com.example.aerocatalogo;
+package com.example.aerocatalogo.models;
 
 public class User {
     private String fullName;

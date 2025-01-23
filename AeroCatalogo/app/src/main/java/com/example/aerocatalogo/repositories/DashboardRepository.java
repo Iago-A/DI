@@ -1,0 +1,77 @@
+package com.example.aerocatalogo.repositories;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.example.aerocatalogo.models.Plane;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DashboardRepository {
+    private final FirebaseDatabase firebaseDatabase;
+    private final MutableLiveData<List<Plane>> planesLiveData;
+    private final MutableLiveData<String> errorLiveData;
+    private ValueEventListener valueEventListener;
+
+    public DashboardRepository() {
+        firebaseDatabase = FirebaseDatabase.getInstance(); // Asegúrate de inicializar Firebase en tu app.
+        planesLiveData = new MutableLiveData<>();
+        errorLiveData = new MutableLiveData<>();
+    }
+
+    public LiveData<List<Plane>> getPlanesLiveData() {
+        return planesLiveData;
+    }
+
+    public LiveData<String> getErrorLiveData() {
+        return errorLiveData;
+    }
+
+    public void fetchPlanes() {
+        // Para que después del logout el DashboardRepository no siga intentando escuchar cambios
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            errorLiveData.setValue("User not authenticated");
+            return;
+        }
+
+        if (valueEventListener != null) {
+            firebaseDatabase.getReference("planes").removeEventListener(valueEventListener);
+        }
+
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Plane> planes = new ArrayList<>();
+                for (DataSnapshot planeSnapshot : snapshot.getChildren()) {
+                    Plane plane = planeSnapshot.getValue(Plane.class); // Plane debe de tener un constructor vacío
+                    if (plane != null) {
+                        planes.add(plane);
+                    }
+                }
+                planesLiveData.setValue(planes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                errorLiveData.setValue("Error fetching data: " + error.getMessage());
+            }
+        };
+
+        firebaseDatabase.getReference("planes").addValueEventListener(valueEventListener);
+    }
+
+    // Limpiar listener tras logout
+    public void cleanup() {
+        if (valueEventListener != null) {
+            firebaseDatabase.getReference("planes").removeEventListener(valueEventListener);
+        }
+    }
+}
