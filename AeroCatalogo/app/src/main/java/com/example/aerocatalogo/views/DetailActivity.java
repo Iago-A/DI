@@ -28,6 +28,12 @@ public class DetailActivity extends AppCompatActivity {
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         Button returnButton = findViewById(R.id.returnButton);
 
+        // Establecer descripciones de accesibilidad.
+        titleTextView.setContentDescription("Avión" + title);
+        imageView.setContentDescription("Imagen del avión " + title);
+        descriptionTextView.setContentDescription("Descripción: " + description);
+        returnButton.setContentDescription("Volver a la lista de aviones");
+
         // Configurar botón de volver
         returnButton.setOnClickListener(v -> {
             finish();
@@ -43,4 +49,3 @@ public class DetailActivity extends AppCompatActivity {
                 .into(imageView);
     }
 }
-

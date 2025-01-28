@@ -2,6 +2,7 @@ package com.example.aerocatalogo.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,12 +15,25 @@ import com.example.aerocatalogo.viewmodels.LoginViewModel;
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        // Obtener referencias de las vistas
+        EditText emailEditText = findViewById(R.id.emailEditText);
+        EditText passwordEditText = findViewById(R.id.passwordEditText);
+        Button loginButton = findViewById(R.id.loginButton);
+        Button createAccountButton = findViewById(R.id.createAccountButton);
+
+        // Establecer descripciones de accesibilidad
+        emailEditText.setContentDescription("Campo para escribir el correo electrónico");
+        passwordEditText.setContentDescription("Campo para escribir la contraseña");
+        loginButton.setContentDescription("Iniciar sesión");
+        createAccountButton.setContentDescription("Crear una nueva cuenta");
 
         // Observadores
         loginViewModel.getErrorMessage().observe(this, errorMessage -> {
@@ -36,17 +50,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        // Configurar botones
-        findViewById(R.id.loginButton).setOnClickListener(v -> {
-            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
-            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
+        // Configurar clic en los botones
+        loginButton.setOnClickListener(v -> {
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
 
             // Delegar el inicio de sesión al ViewModel
             loginViewModel.loginUser(email, password);
         });
 
-        findViewById(R.id.createAccountButton).setOnClickListener(v -> {
+        createAccountButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });

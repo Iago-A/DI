@@ -1,6 +1,7 @@
 package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,6 +21,24 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        
+        // Obtener referencias de las vistas
+        EditText fullNameEditText = findViewById(R.id.fullNameEditText);
+        EditText emailEditText = findViewById(R.id.emailEditText);
+        EditText phoneEditText = findViewById(R.id.phoneEditText);
+        EditText addressEditText = findViewById(R.id.addressEditText);
+        EditText passwordEditText = findViewById(R.id.passwordEditText);
+        EditText confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        Button registerButton = findViewById(R.id.registerButton);
+
+        // Establecer descripciones de accesibilidad
+        fullNameEditText.setContentDescription("Campo para escribir el nombre completo");
+        emailEditText.setContentDescription("Campo para escribir el correo electrónico");
+        phoneEditText.setContentDescription("Campo para escribir el número de teléfono");
+        addressEditText.setContentDescription("Campo para escribir la dirección");
+        passwordEditText.setContentDescription("Campo para escribir la contraseña");
+        confirmPasswordEditText.setContentDescription("Campo para confirmar la contraseña");
+        registerButton.setContentDescription("Registrar usuario");
 
         // Observadores para los resultados
         registerViewModel.getErrorMessage().observe(this, errorMessage -> {
@@ -36,13 +55,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Configurar el botón de registro
-        findViewById(R.id.registerButton).setOnClickListener(v -> {
-            String fullName = ((EditText) findViewById(R.id.fullNameEditText)).getText().toString();
-            String email = ((EditText) findViewById(R.id.emailEditText)).getText().toString();
-            String phone = ((EditText) findViewById(R.id.phoneEditText)).getText().toString();
-            String address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
-            String password = ((EditText) findViewById(R.id.passwordEditText)).getText().toString();
-            String confirmPassword = ((EditText) findViewById(R.id.confirmPasswordEditText)).getText().toString();
+        registerButton.setOnClickListener(v -> {
+            String fullName = fullNameEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
+            String address = addressEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String confirmPassword = confirmPasswordEditText.getText().toString();
 
             // Delegar la validación y registro al ViewModel
             registerViewModel.registerUser(fullName, email, phone, address, password, confirmPassword);
