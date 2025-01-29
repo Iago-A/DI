@@ -14,6 +14,7 @@ import com.example.aerocatalogo.R;
 import com.example.aerocatalogo.adapters.PlaneAdapter;
 import com.example.aerocatalogo.models.Plane;
 import com.example.aerocatalogo.viewmodels.DashboardViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -57,15 +58,29 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setContentDescription("Cerrar sesión");
-        logoutButton.setOnClickListener(v -> {
+        // Configurar botón de logout
+        FloatingActionButton logoutFab = findViewById(R.id.logoutFab);
+        logoutFab.setContentDescription("Cerrar sesión");
+        logoutFab.setOnClickListener(v -> {
             // Limpiar ViewModel
             getViewModelStore().clear();
             mAuth.signOut();
             Toast.makeText(this, "Logout correctly", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        });
+
+        // Configurar botón de configuración
+        FloatingActionButton settingsFab = findViewById(R.id.settingsFab);
+        settingsFab.setContentDescription("Abrir configuración");
+        settingsFab.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error al abrir configuraciones", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         });
     }
 
