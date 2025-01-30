@@ -4,27 +4,40 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 
 public class SettingsViewModel extends AndroidViewModel {
     private static final String PREFS_NAME = "AppConfig";
-    private static final String DARK_MODE_KEY = "darkMode";
+    private static final String KEY_DARK_MODE = "darkMode";
     private final SharedPreferences sharedPreferences;
+    private final MutableLiveData<Boolean> darkModeLiveData = new MutableLiveData<>();
 
     public SettingsViewModel(Application application) {
         super(application);
-        sharedPreferences = getApplication().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        darkModeLiveData.setValue(sharedPreferences.getBoolean(KEY_DARK_MODE, false));
     }
 
-    // Obtener la preferencia del modo oscuro
-    public boolean isDarkModeEnabled() {
-        return sharedPreferences.getBoolean(DARK_MODE_KEY, false);
+    public LiveData<Boolean> getDarkModeLiveData() {
+        return darkModeLiveData;
     }
 
-    // Guardar el estado del modo oscuro
-    public void saveDarkModePreference(boolean isEnabled) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DARK_MODE_KEY, isEnabled);
-        editor.apply();
+    public void setDarkMode(boolean isEnabled) {
+        sharedPreferences.edit().putBoolean(KEY_DARK_MODE, isEnabled).apply();
+        darkModeLiveData.setValue(isEnabled);
+        applyDarkMode(isEnabled);
+    }
+
+    private void applyDarkMode(boolean enable) {
+        if (enable) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }
+

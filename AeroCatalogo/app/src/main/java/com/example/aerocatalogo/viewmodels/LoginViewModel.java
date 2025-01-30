@@ -41,5 +41,9 @@ public class LoginViewModel extends ViewModel {
             }
         });
     }
+
+    public void resetLoginState() {
+        isLoginSuccessful.setValue(null);
+    }
 }
 

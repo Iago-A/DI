@@ -15,7 +15,7 @@
         <activity android:name=".views.DetailActivity"
             android:exported="false" />
         <activity android:name=".views.DashboardActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".views.RegisterActivity"
             android:exported="false" />

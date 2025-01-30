@@ -1,12 +1,15 @@
 package com.example.aerocatalogo.views;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.aerocatalogo.R;
@@ -18,6 +21,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getSharedPreferences("AppConfig", Context.MODE_PRIVATE);
+        boolean darkMode = sharedPref.getBoolean("darkMode", false);
+
+        // Aplicar el tema antes de setContentView()
+        if (darkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -47,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login successful.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                 startActivity(intent);
+
+                // Reseteamos el estado para evitar que se dispare al recrear la actividad
+                loginViewModel.resetLoginState();
             }
         });
 
