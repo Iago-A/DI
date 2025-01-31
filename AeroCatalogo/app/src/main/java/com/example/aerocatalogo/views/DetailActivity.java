@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.aerocatalogo.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -26,16 +27,18 @@ public class DetailActivity extends AppCompatActivity {
         TextView titleTextView = findViewById(R.id.titleTextView);
         ImageView imageView = findViewById(R.id.imageView);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-        Button returnButton = findViewById(R.id.returnButton);
+        FloatingActionButton returnFab = findViewById(R.id.returnFab);
+        FloatingActionButton favoriteFab = findViewById(R.id.favoriteFab);
 
         // Establecer descripciones de accesibilidad.
         titleTextView.setContentDescription("Avión" + title);
         imageView.setContentDescription("Imagen del avión " + title);
         descriptionTextView.setContentDescription("Descripción: " + description);
-        returnButton.setContentDescription("Volver a la lista de aviones");
+        returnFab.setContentDescription("Volver a la lista de aviones");
+        favoriteFab.setContentDescription("Añadir o eliminar de favoritos");
 
         // Configurar botón de volver
-        returnButton.setOnClickListener(v -> {
+        returnFab.setOnClickListener(v -> {
             finish();
         });
 

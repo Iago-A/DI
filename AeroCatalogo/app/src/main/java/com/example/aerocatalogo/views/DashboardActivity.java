@@ -45,6 +45,16 @@ public class DashboardActivity extends AppCompatActivity {
         // Configurar ViewModel
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
+        // Obtener referencias de las vistas
+        FloatingActionButton logoutFab = findViewById(R.id.logoutFab);
+        FloatingActionButton settingsFab = findViewById(R.id.settingsFab);
+        FloatingActionButton favoritesListFab = findViewById(R.id.favoritesListFab);
+
+        // Establecer descripciones de accesibilidad.
+        logoutFab.setContentDescription("Cerrar sesión");
+        settingsFab.setContentDescription("Abrir configuración");
+        favoritesListFab.setContentDescription("Abrir lista de favoritos");
+
         // Observar cambios en la lista de aviones
         viewModel.getPlanes().observe(this, planes -> {
             adapter = new PlaneAdapter(planes, this::openDetailActivity);
@@ -59,8 +69,6 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         // Configurar botón de logout
-        FloatingActionButton logoutFab = findViewById(R.id.logoutFab);
-        logoutFab.setContentDescription("Cerrar sesión");
         logoutFab.setOnClickListener(v -> {
             // Limpiar ViewModel
             getViewModelStore().clear();
@@ -71,8 +79,6 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         // Configurar botón de configuración
-        FloatingActionButton settingsFab = findViewById(R.id.settingsFab);
-        settingsFab.setContentDescription("Abrir configuración");
         settingsFab.setOnClickListener(v -> {
             try {
                 Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
@@ -81,6 +87,11 @@ public class DashboardActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error al abrir configuraciones", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+        });
+
+        // Configurar botón de favoritos
+        favoritesListFab.setOnClickListener(v -> {
+
         });
     }
 
