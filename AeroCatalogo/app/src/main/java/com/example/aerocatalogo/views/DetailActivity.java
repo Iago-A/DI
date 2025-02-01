@@ -1,17 +1,19 @@
 package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.aerocatalogo.R;
+import com.example.aerocatalogo.viewmodels.FavoritesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DetailActivity extends AppCompatActivity {
+    private FloatingActionButton favoriteFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +24,16 @@ public class DetailActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra("plane_title");
         String description = getIntent().getStringExtra("plane_description");
         String url = getIntent().getStringExtra("plane_url");
+        String planeId = getIntent().getStringExtra("plane_id");
+
+        FavoritesViewModel favoritesViewModel = new ViewModelProvider(this).get(FavoritesViewModel.class);
 
         // Obtener referencias de las vistas
         TextView titleTextView = findViewById(R.id.titleTextView);
         ImageView imageView = findViewById(R.id.imageView);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         FloatingActionButton returnFab = findViewById(R.id.returnFab);
-        FloatingActionButton favoriteFab = findViewById(R.id.favoriteFab);
+        favoriteFab = findViewById(R.id.favoriteFab);
 
         // Establecer descripciones de accesibilidad.
         titleTextView.setContentDescription("Avión" + title);
@@ -50,5 +55,20 @@ public class DetailActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(url)
                 .into(imageView);
+
+        // Observar estado favorito
+        favoritesViewModel.isFavorite(planeId).observe(this, isFavorite ->
+                updateFabIcon(isFavorite)
+        );
+
+        favoriteFab.setOnClickListener(v ->
+            favoritesViewModel.toggleFavorite(planeId)
+        );
+    }
+
+    private void updateFabIcon(boolean isFavorite) {
+        favoriteFab.setImageResource(
+                isFavorite ? R.drawable.baseline_star_24 : R.drawable.baseline_star_border_24
+        );
     }
 }

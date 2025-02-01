@@ -37,7 +37,8 @@
         app:layout_constraintBottom_toBottomOf="@id/returnFab"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/favoriteFab"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:textColor="@color/md_theme_primary" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -66,7 +67,8 @@
             android:text="Plane Description"
             android:textSize="16sp"
             android:justificationMode="inter_word"
-            android:layout_marginRight="12dp"/>
+            android:layout_marginRight="12dp"
+            android:textColor="@color/md_theme_primary" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

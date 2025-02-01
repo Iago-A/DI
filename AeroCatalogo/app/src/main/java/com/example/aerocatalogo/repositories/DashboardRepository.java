@@ -51,8 +51,13 @@ public class DashboardRepository {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Plane> planes = new ArrayList<>();
                 for (DataSnapshot planeSnapshot : snapshot.getChildren()) {
-                    Plane plane = planeSnapshot.getValue(Plane.class); // Plane debe de tener un constructor vacío
+                    // Obtener la clave que usaremos como id:
+                    String planeId = planeSnapshot.getKey();
+
+                    // Convierte el snapshot en un objeto Plane. Para qllo, la clase Plane debe tener un constructor vacío.
+                    Plane plane = planeSnapshot.getValue(Plane.class);
                     if (plane != null) {
+                        plane.setId(planeId);
                         planes.add(plane);
                     }
                 }

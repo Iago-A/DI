@@ -17,7 +17,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -30,7 +32,9 @@
         android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/emailEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <Button
         android:id="@+id/loginButton"
@@ -51,7 +55,8 @@
         app:layout_constraintBottom_toTopOf="@id/createAccountButton"
         android:layout_marginBottom="15dp"
         android:textSize="20dp"
-        android:text="Don't have an account yet?" />
+        android:text="Don't have an account yet?"
+        android:textColor="@color/md_theme_primary" />
 
     <Button
         android:id="@+id/createAccountButton"

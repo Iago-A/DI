@@ -27,6 +27,9 @@
             android:allowBackup="true"
             android:exported="false" />
         <activity
+           android:name=".views.FavoritesActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.LoginActivity"
             android:exported="true">
             <intent-filter>

@@ -14,7 +14,9 @@
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/emailEditText"
@@ -24,7 +26,9 @@
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/fullNameEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -35,7 +39,9 @@
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/emailEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/confirmPasswordEditText"
@@ -46,7 +52,9 @@
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/passwordEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/phoneEditText"
@@ -57,7 +65,9 @@
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/addressEditText"
@@ -65,7 +75,9 @@
         android:layout_height="50dp"
         android:hint="Address"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/phoneEditText" />
+        app:layout_constraintTop_toBottomOf="@id/phoneEditText"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <Button
         android:id="@+id/registerButton"

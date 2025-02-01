@@ -2,7 +2,6 @@ package com.example.aerocatalogo.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,7 +90,13 @@ public class DashboardActivity extends AppCompatActivity {
 
         // Configurar botón de favoritos
         favoritesListFab.setOnClickListener(v -> {
-
+            try {
+                Intent intent = new Intent(DashboardActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error al abrir favoritos", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         });
     }
 
@@ -100,6 +105,7 @@ public class DashboardActivity extends AppCompatActivity {
         intent.putExtra("plane_title", plane.getTitle());
         intent.putExtra("plane_description", plane.getDescription());
         intent.putExtra("plane_url", plane.getUrl());
+        intent.putExtra("plane_id", plane.getId());
         startActivity(intent);
     }
 }
