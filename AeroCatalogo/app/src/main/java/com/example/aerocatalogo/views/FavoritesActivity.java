@@ -1,7 +1,5 @@
 package com.example.aerocatalogo.views;
 
-import static androidx.databinding.DataBindingUtil.setContentView;
-
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;

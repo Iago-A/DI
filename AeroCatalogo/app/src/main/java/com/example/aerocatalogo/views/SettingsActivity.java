@@ -2,6 +2,7 @@ package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,9 +20,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        // Inicializar vistas
+        // Obtener referencias de las vistas
+        TextView textView = findViewById(R.id.textView);
         Switch darkModeSwitch = findViewById(R.id.darkModeSwitch);
         FloatingActionButton returnFab = findViewById(R.id.returnFab);
+
+        // Establecer descripciones de accesibilidad
+        textView.setContentDescription("Modo oscuro");
+        darkModeSwitch.setContentDescription("Activar o desactivar modo oscuro");
+        returnFab.setContentDescription("Volver");
 
         // Observar el estado del modo oscuro
         settingsViewModel.getDarkModeLiveData().observe(this, darkModeSwitch::setChecked);

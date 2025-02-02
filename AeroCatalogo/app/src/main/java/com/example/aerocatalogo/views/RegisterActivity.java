@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerViewModel.isRegistrationSuccessful().observe(this, isSuccessful -> {
             if (isSuccessful != null && isSuccessful) {
-                Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

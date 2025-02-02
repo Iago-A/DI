@@ -37,7 +37,7 @@ public class DashboardRepository {
     public void fetchPlanes() {
         // Para que después del logout el DashboardRepository no siga intentando escuchar cambios
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            errorLiveData.setValue("User not authenticated");
+            errorLiveData.setValue("Usuario no autenticado");
             return;
         }
 
@@ -66,7 +66,7 @@ public class DashboardRepository {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                errorLiveData.setValue("Error fetching data: " + error.getMessage());
+                errorLiveData.setValue("Error al obtener datos: " + error.getMessage());
             }
         };
 

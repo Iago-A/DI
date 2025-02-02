@@ -25,7 +25,7 @@ public class LoginViewModel extends ViewModel {
 
     public void loginUser(String email, String password) {
         if (email.isEmpty() || password.isEmpty()) {
-            errorMessage.setValue("Please complete all fields.");
+            errorMessage.setValue("Por favor, rellene todos los campos");
             return;
         }
 
@@ -37,7 +37,7 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue("Error in authentication: " + e.getMessage());
+                errorMessage.setValue("Error en la autenticación: " + e.getMessage());
             }
         });
     }

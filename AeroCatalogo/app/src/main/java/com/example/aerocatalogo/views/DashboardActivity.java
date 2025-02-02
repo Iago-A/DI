@@ -72,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity {
             // Limpiar ViewModel
             getViewModelStore().clear();
             mAuth.signOut();
-            Toast.makeText(this, "Logout correctly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });

@@ -1,6 +1,7 @@
 package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.example.aerocatalogo.R;
 import com.example.aerocatalogo.viewmodels.FavoritesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class DetailActivity extends AppCompatActivity {
     private FloatingActionButton favoriteFab;
@@ -34,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         FloatingActionButton returnFab = findViewById(R.id.returnFab);
         favoriteFab = findViewById(R.id.favoriteFab);
+        View rootView = findViewById(android.R.id.content);
 
         // Establecer descripciones de accesibilidad.
         titleTextView.setContentDescription("Avión" + title);
@@ -64,6 +67,15 @@ public class DetailActivity extends AppCompatActivity {
         favoriteFab.setOnClickListener(v ->
             favoritesViewModel.toggleFavorite(planeId)
         );
+
+        // Observar cambios y mostrar Snackbar
+        favoritesViewModel.getFavoriteActionStatus().observe(this, isFavorite -> {
+            String message = isFavorite ?
+                    "Añadido a favoritos" :
+                    "Eliminado de favoritos";
+
+            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
+        });
     }
 
     private void updateFabIcon(boolean isFavorite) {
