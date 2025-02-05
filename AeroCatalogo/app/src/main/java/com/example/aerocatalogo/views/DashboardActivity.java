@@ -2,7 +2,6 @@ package com.example.aerocatalogo.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import com.example.aerocatalogo.R;
 import com.example.aerocatalogo.adapters.PlaneAdapter;
 import com.example.aerocatalogo.models.Plane;
 import com.example.aerocatalogo.viewmodels.DashboardViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -44,6 +44,16 @@ public class DashboardActivity extends AppCompatActivity {
         // Configurar ViewModel
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
+        // Obtener referencias de las vistas
+        FloatingActionButton logoutFab = findViewById(R.id.logoutFab);
+        FloatingActionButton settingsFab = findViewById(R.id.settingsFab);
+        FloatingActionButton favoritesListFab = findViewById(R.id.favoritesListFab);
+
+        // Establecer descripciones de accesibilidad.
+        logoutFab.setContentDescription("Cerrar sesión");
+        settingsFab.setContentDescription("Abrir configuración");
+        favoritesListFab.setContentDescription("Abrir lista de favoritos");
+
         // Observar cambios en la lista de aviones
         viewModel.getPlanes().observe(this, planes -> {
             adapter = new PlaneAdapter(planes, this::openDetailActivity);
@@ -57,14 +67,36 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
+        // Configurar botón de logout
+        logoutFab.setOnClickListener(v -> {
             // Limpiar ViewModel
             getViewModelStore().clear();
             mAuth.signOut();
-            Toast.makeText(this, "Logout correctly", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        });
+
+        // Configurar botón de configuración
+        settingsFab.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(DashboardActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error al abrir configuraciones", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        });
+
+        // Configurar botón de favoritos
+        favoritesListFab.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(DashboardActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error al abrir favoritos", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         });
     }
 
@@ -73,57 +105,7 @@ public class DashboardActivity extends AppCompatActivity {
         intent.putExtra("plane_title", plane.getTitle());
         intent.putExtra("plane_description", plane.getDescription());
         intent.putExtra("plane_url", plane.getUrl());
+        intent.putExtra("plane_id", plane.getId());
         startActivity(intent);
     }
 }
-
-
-
-
-//        // Inicializar vistas
-//        TextView titleTextView = findViewById(R.id.titleTextView);
-//        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-//        ImageView imageView = findViewById(R.id.imageView);
-//        Button logoutButton = findViewById(R.id.logoutButton);
-//
-//        // Configurar botón de logout
-//        logoutButton.setOnClickListener(v -> {
-//            mAuth.signOut();
-//            Toast.makeText(this, "You closed your session", Toast.LENGTH_SHORT).show();
-//            finish();
-//        });
-//
-//        // Obtener datos de Firebase
-//        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("pictures").child("picture1");
-//
-//        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    // Obtener valores
-//                    String title = dataSnapshot.child("title").getValue(String.class);
-//                    String description = dataSnapshot.child("description").getValue(String.class);
-//                    String imageUrl = dataSnapshot.child("url").getValue(String.class);
-//
-//                    // Actualizar UI
-//                    titleTextView.setText(title);
-//                    descriptionTextView.setText(description);
-//
-//                    // Cargar imagen usando Glide
-//                    if (imageUrl != null && !imageUrl.isEmpty()) {
-//                        Glide.with(DashboardActivity.this)
-//                                .load(imageUrl)
-//                                .into(imageView);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Toast.makeText(DashboardActivity.this,
-//                        "Error al cargar datos: " + error.getMessage(),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//}

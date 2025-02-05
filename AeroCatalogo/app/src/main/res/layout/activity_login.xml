@@ -12,12 +12,14 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:hint="Email"
+        android:hint="Correo electrónico"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.3"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -26,11 +28,13 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
-        android:hint="Password"
+        android:hint="Contraseña"
         android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/emailEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/md_theme_primary"
+        android:textColorHint="@color/md_theme_primary" />
 
     <Button
         android:id="@+id/loginButton"
@@ -40,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="15dp"
-        android:text="Login" />
+        android:text="Iniciar sesión" />
 
     <TextView
         android:id="@+id/createAccountText"
@@ -51,7 +55,8 @@
         app:layout_constraintBottom_toTopOf="@id/createAccountButton"
         android:layout_marginBottom="15dp"
         android:textSize="20dp"
-        android:text="Don't have an account yet?" />
+        android:text="¿Aún no tienes una cuenta?"
+        android:textColor="@color/md_theme_primary" />
 
     <Button
         android:id="@+id/createAccountButton"
@@ -61,6 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="25dp"
-        android:text="Create account" />
+        android:text="Crear cuenta" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@ public class DashboardRepository {
     public void fetchPlanes() {
         // Para que después del logout el DashboardRepository no siga intentando escuchar cambios
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            errorLiveData.setValue("User not authenticated");
+            errorLiveData.setValue("Usuario no autenticado");
             return;
         }
 
@@ -51,8 +51,13 @@ public class DashboardRepository {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Plane> planes = new ArrayList<>();
                 for (DataSnapshot planeSnapshot : snapshot.getChildren()) {
-                    Plane plane = planeSnapshot.getValue(Plane.class); // Plane debe de tener un constructor vacío
+                    // Obtener la clave que usaremos como id:
+                    String planeId = planeSnapshot.getKey();
+
+                    // Convierte el snapshot en un objeto Plane. Para qllo, la clase Plane debe tener un constructor vacío.
+                    Plane plane = planeSnapshot.getValue(Plane.class);
                     if (plane != null) {
+                        plane.setId(planeId);
                         planes.add(plane);
                     }
                 }
@@ -61,7 +66,7 @@ public class DashboardRepository {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                errorLiveData.setValue("Error fetching data: " + error.getMessage());
+                errorLiveData.setValue("Error al obtener datos: " + error.getMessage());
             }
         };
 

@@ -26,17 +26,17 @@ public class RegisterViewModel extends ViewModel {
     public void registerUser(String fullName, String email, String phone, String address, String password, String confirmPassword) {
         // Validaciones
         if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty() || address.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            errorMessage.setValue("All fields must be filled");
+            errorMessage.setValue("Se debe de llenar todos los campos");
             return;
         }
 
         if (!password.equals(confirmPassword)) {
-            errorMessage.setValue("Passwords do not match");
+            errorMessage.setValue("Las contraseñas no coinciden");
             return;
         }
 
         if (password.length() < 6) {
-            errorMessage.setValue("Password must be at least 6 characters long");
+            errorMessage.setValue("La contraseña debe tener al menos 6 caracteres");
             return;
         }
 
@@ -49,7 +49,7 @@ public class RegisterViewModel extends ViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                errorMessage.setValue("Error registering user: " + e.getMessage());
+                errorMessage.setValue("Error registrando usuario: " + e.getMessage());
             }
         });
     }

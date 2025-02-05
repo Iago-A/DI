@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:text="@{plane.title}"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/md_theme_primary"/>
 
         <ImageView
             android:id="@+id/planeImage"
