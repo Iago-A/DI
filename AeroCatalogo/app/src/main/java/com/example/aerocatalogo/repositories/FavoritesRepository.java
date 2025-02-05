@@ -1,10 +1,12 @@
 package com.example.aerocatalogo.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.aerocatalogo.models.Favorite;
+import com.example.aerocatalogo.models.Plane;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,13 +19,18 @@ import java.util.List;
 
 public class FavoritesRepository {
     private DatabaseReference userFavoritesRef;
+    private DatabaseReference planesFavoritesRef;
+
 
     public FavoritesRepository(String userId) {
         userFavoritesRef = FirebaseDatabase.getInstance()
                 .getReference("users/" + userId + "/favorites");
+        planesFavoritesRef =FirebaseDatabase.getInstance().getReference("planes");
     }
 
-    public Task<Boolean> toggleFavorite(String planeId) {
+    public Task<Boolean> toggleFavorite(Plane plane) {
+        String planeId = plane.getId();
+
         return userFavoritesRef.child(planeId).get()
                 .continueWithTask(task -> {
                     DataSnapshot snapshot = task.getResult();
@@ -32,22 +39,41 @@ public class FavoritesRepository {
                     return isFavorite
                             ? userFavoritesRef.child(planeId).removeValue()
                             .continueWith(removeTask -> false)
-                            : userFavoritesRef.child(planeId).setValue(true)
+                            : userFavoritesRef.child(planeId).setValue(plane)
                             .continueWith(addTask -> true);
                 });
     }
 
-    public LiveData<List<Favorite>> getFavorites() {
-        MutableLiveData<List<Favorite>> favoritesLiveData = new MutableLiveData<>();
+    public LiveData<List<Plane>> getFavorites() {
+        MutableLiveData<List<Plane>> favoritesLiveData = new MutableLiveData<>();
 
         userFavoritesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Favorite> favorites = new ArrayList<>();
+                List<String> favIds = new ArrayList<>();
+
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    favorites.add(new Favorite(child.getKey(), true));
+                    String planeId = child.getKey();
+                    favIds.add(planeId);
                 }
-                favoritesLiveData.setValue(favorites);
+
+                    planesFavoritesRef.addValueEventListener(new ValueEventListener() {
+                        final List<Plane> favorites = new ArrayList<>();
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot favSnapshot) {
+                           for (String planeId : favIds) {
+                               Plane plane = favSnapshot.child(planeId).getValue(Plane.class);
+                               plane.setId(planeId);
+                               favorites.add(plane);
+                           }
+                            favoritesLiveData.setValue(favorites);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
             }
 
             @Override
@@ -58,7 +84,6 @@ public class FavoritesRepository {
 
         return favoritesLiveData;
     }
-
     public LiveData<Boolean> isFavorite(String planeId) {
         MutableLiveData<Boolean> isFavoriteLiveData = new MutableLiveData<>();
 

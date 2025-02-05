@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.aerocatalogo.R;
+import com.example.aerocatalogo.models.Plane;
 import com.example.aerocatalogo.viewmodels.FavoritesViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +28,9 @@ public class DetailActivity extends AppCompatActivity {
         String description = getIntent().getStringExtra("plane_description");
         String url = getIntent().getStringExtra("plane_url");
         String planeId = getIntent().getStringExtra("plane_id");
+
+        // Construir el objeto Plane
+        Plane currentPlane = new Plane(planeId, title, description, url);
 
         FavoritesViewModel favoritesViewModel = new ViewModelProvider(this).get(FavoritesViewModel.class);
 
@@ -60,12 +64,12 @@ public class DetailActivity extends AppCompatActivity {
                 .into(imageView);
 
         // Observar estado favorito
-        favoritesViewModel.isFavorite(planeId).observe(this, isFavorite ->
+        favoritesViewModel.isFavorite(currentPlane.getId()).observe(this, isFavorite ->
                 updateFabIcon(isFavorite)
         );
 
         favoriteFab.setOnClickListener(v ->
-            favoritesViewModel.toggleFavorite(planeId)
+            favoritesViewModel.toggleFavorite(currentPlane)
         );
 
         // Observar cambios y mostrar Snackbar

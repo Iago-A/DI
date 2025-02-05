@@ -8,6 +8,13 @@ public class Plane {
 
     public Plane() {} // Constructor vacío necesario para Firebase
 
+    public Plane(String id, String title, String description, String url) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.url = url;
+    }
+
     public String getTitle() {
         return title;
     }

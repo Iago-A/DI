@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.aerocatalogo.models.Favorite;
+import com.example.aerocatalogo.models.Plane;
 import com.example.aerocatalogo.repositories.FavoritesRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +26,7 @@ public class FavoritesViewModel extends AndroidViewModel {
         favoritesRepository = new FavoritesRepository(userId);
     }
 
-    public LiveData<List<Favorite>> getFavorites() {
+    public LiveData<List<Plane>> getFavorites() {
         return favoritesRepository.getFavorites();
     }
 
@@ -39,8 +39,8 @@ public class FavoritesViewModel extends AndroidViewModel {
         return favoriteActionStatus;
     }
 
-    public void toggleFavorite(String planeId) {
-        favoritesRepository.toggleFavorite(planeId)
+    public void toggleFavorite(Plane plane) {
+        favoritesRepository.toggleFavorite(plane)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Actualizamos el LiveData con el nuevo estado (para el snackbar)
