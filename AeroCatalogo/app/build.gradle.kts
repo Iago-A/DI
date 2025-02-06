@@ -55,5 +55,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation ("androidx.recyclerview:recyclerview:1.4.0")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.5")
 
 }
