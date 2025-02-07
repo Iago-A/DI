@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.isLoginSuccessful().observe(this, isSuccessful -> {
             if (isSuccessful != null && isSuccessful) {
                 Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
 
                 // Reseteamos el estado para evitar que se dispare al recrear la actividad

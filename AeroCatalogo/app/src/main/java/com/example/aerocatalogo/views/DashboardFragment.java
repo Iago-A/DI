@@ -1,5 +1,6 @@
 package com.example.aerocatalogo.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class DashboardFragment extends Fragment {
         favoritesListFab.setContentDescription("Abrir lista de favoritos");
 
         // Observar cambios en la lista de aviones
-        viewModel.getPlanes().observe(this, planes -> {
+        viewModel.getPlanes().observe(getViewLifecycleOwner(), planes -> {
             adapter = new PlaneAdapter(planes, this::openDetailFragment);
             recyclerView.setAdapter(adapter);
         });
@@ -78,28 +79,29 @@ public class DashboardFragment extends Fragment {
             getViewModelStore().clear();
             mAuth.signOut();
             Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(view).navigate(R.id.action_dashboardFragment_to_loginActivity);
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
+            startActivity(intent);
             requireActivity().finish();
         });
 
         // Configurar botón de configuración
         settingsFab.setOnClickListener(v -> {
-            try {
-                Navigation.findNavController(view).navigate(R.id.action_dashboardFragment_to_profileFragment);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "Error al abrir configuraciones", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+            ProfileFragment profileFragment = new ProfileFragment();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, profileFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         // Configurar botón de favoritos
         favoritesListFab.setOnClickListener(v -> {
-            try {
-                Navigation.findNavController(view).navigate(R.id.action_dashboardFragment_to_favouritesFragment);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "Error al abrir favoritos", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+            FavoritesFragment favoritesFragment = new FavoritesFragment();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, favoritesFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
@@ -112,6 +114,13 @@ public class DashboardFragment extends Fragment {
         bundle.putString("plane_url", plane.getUrl());
         bundle.putString("plane_id", plane.getId());
 
-        Navigation.findNavController(requireView()).navigate(R.id.action_dashboardFragment_to_detailFragment, bundle);
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(bundle);
+
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, detailFragment) // Asegúrate de que este ID sea correcto en tu activity_main.xml
+                .addToBackStack(null) // Permite regresar al fragmento anterior con el botón atrás
+                .commit();
     }
 }

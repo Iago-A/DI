@@ -31,6 +31,8 @@ public class DetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         // Obtener los datos pasados por el Bundle
+        Bundle bundle = getArguments();
+
         if (bundle != null) {
             String title = bundle.getString("plane_title");
             String description = bundle.getString("plane_description");
