@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, detailFragment) // Asegúrate de que este ID sea correcto en tu activity_main.xml
+                .replace(R.id.fragmentContainer, detailFragment)
                 .addToBackStack(null) // Permite regresar al fragmento anterior con el botón atrás
                 .commit();
     }

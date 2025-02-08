@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +49,7 @@ public class FavoritesFragment extends Fragment {
 
         // Configurar botón volver
         returnFab.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigateUp();
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         // Observar cambios en la lista de aviones

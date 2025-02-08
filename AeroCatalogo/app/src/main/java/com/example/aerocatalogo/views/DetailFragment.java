@@ -50,7 +50,6 @@ public class DetailFragment extends Fragment {
             TextView descriptionTextView = view.findViewById(R.id.descriptionTextView);
             FloatingActionButton returnFab = view.findViewById(R.id.returnFab);
             favoriteFab = view.findViewById(R.id.favoriteFab);
-            View rootView = view.findViewById(android.R.id.content);
 
             // Establecer descripciones de accesibilidad.
             titleTextView.setContentDescription("Avión" + title);
@@ -61,7 +60,7 @@ public class DetailFragment extends Fragment {
 
             // Configurar botón de volver
             returnFab.setOnClickListener(v -> {
-                Navigation.findNavController(view).navigateUp();
+                requireActivity().getSupportFragmentManager().popBackStack();
             });
 
             // Asignar datos a las vistas
@@ -78,6 +77,7 @@ public class DetailFragment extends Fragment {
                     updateFabIcon(isFavorite)
             );
 
+            // Comfigurar botón de favoritos
             favoriteFab.setOnClickListener(v ->
                     favoritesViewModel.toggleFavorite(currentPlane)
             );
@@ -88,7 +88,11 @@ public class DetailFragment extends Fragment {
                         "Añadido a favoritos" :
                         "Eliminado de favoritos";
 
-                Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
+                View rootView = requireActivity().findViewById(android.R.id.content); // Asegurar una vista válida
+
+                if (rootView != null) {
+                    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+                }
             });
         }
 
