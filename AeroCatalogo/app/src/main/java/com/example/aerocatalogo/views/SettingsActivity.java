@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.aerocatalogo.R;
-import com.example.aerocatalogo.viewmodels.SettingsViewModel;
+import com.example.aerocatalogo.viewmodels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -18,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         // Obtener referencias de las vistas
         TextView textView = findViewById(R.id.textView);
@@ -31,12 +31,12 @@ public class SettingsActivity extends AppCompatActivity {
         returnFab.setContentDescription("Volver");
 
         // Observar el estado del modo oscuro
-        settingsViewModel.getDarkModeLiveData().observe(this, darkModeSwitch::setChecked);
+        profileViewModel.getDarkModeLiveData().observe(this, darkModeSwitch::setChecked);
 
         // Configurar switch
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Aplicar el tema inmediatamente
-            settingsViewModel.setDarkMode(isChecked);
+            profileViewModel.setDarkMode(isChecked);
         });
 
         // Configurar botón de volver

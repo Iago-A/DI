@@ -1,6 +1,10 @@
 package com.example.aerocatalogo.repositories;
 
 import com.example.aerocatalogo.models.User;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -58,6 +62,23 @@ public class UserRepository {
     public interface OnLoginListener {
         void onSuccess();
         void onFailure(Exception e);
+    }
+
+    public Task<Void> changePassword(String currentPass, String newPass) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null && !newPass.isEmpty()) {
+            AuthCredential credential = EmailAuthProvider
+                    .getCredential(user.getEmail(), currentPass);
+
+            return user.reauthenticate(credential)
+                    .continueWithTask(task -> {
+                        if (task.isSuccessful()) {
+                            return user.updatePassword(newPass);
+                        }
+                        throw task.getException();
+                    });
+        }
+        return Tasks.forException(new Exception("Usuario no válido o contraseña vacía"));
     }
 
 }

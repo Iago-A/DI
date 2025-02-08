@@ -52,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getErrorMessage().observe(this, errorMessage -> {
             if (errorMessage != null) {
                 Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+
+                // Reseteamos el error para evitar que se dispare al recrear la actividad
+                loginViewModel.resetLoginError();
             }
         });
 
