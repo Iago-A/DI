@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_dashboard"
-        android:title="Dashboard"
+        android:title="Inicio"
         android:icon="@drawable/baseline_menu_24" />
 
     <item
@@ -16,6 +16,6 @@
 
     <item
         android:id="@+id/nav_logout"
-        android:title="Cerrar Sesión"
+        android:title="Cerrar sesión"
         android:icon="@drawable/baseline_logout_24" />
 </menu>

@@ -2,6 +2,7 @@ package com.example.aerocatalogo.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,11 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.aerocatalogo.R;
 import com.example.aerocatalogo.databinding.ActivityMainBinding;
+import com.example.aerocatalogo.repositories.DashboardRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;  // DataBinding
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_dashboard) {
                 openFragment(new DashboardFragment());
             } else if (id == R.id.nav_favorites) {
-                openFragment(new FavoritesFragment());
+                openFragment(new FavoritesFragment()); // Permite regresar al fragmento anterior con el botón atrás
             } else if (id == R.id.nav_profile) {
-                openFragment(new ProfileFragment());
+                openFragment(new ProfileFragment()); // Permite regresar al fragmento anterior con el botón atrás
             } else if (id == R.id.nav_logout) {
                 logoutUser();
             }
@@ -51,14 +53,20 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null) // Permite regresar al fragmento anterior con el botón atrás
                 .commit();
     }
 
     private void logoutUser() {
+        DashboardRepository dashboardRepository = new DashboardRepository();
+        dashboardRepository.cleanup();
+
+        getViewModelStore().clear(); // Limpiar ViewModel
         FirebaseAuth.getInstance().signOut();
+        Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         // Redireccionar a LoginActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        finish(); // Para que no pueda volver con el botón atrás
+        this.finish();
     }
 }

@@ -75,8 +75,7 @@ public class DashboardFragment extends Fragment {
 
         // Configurar botón de logout
         logoutFab.setOnClickListener(v -> {
-            // Limpiar ViewModel
-            getViewModelStore().clear();
+            getViewModelStore().clear(); // Limpiar ViewModel
             mAuth.signOut();
             Toast.makeText(requireContext(), "Sesión cerrada", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(requireActivity(), LoginActivity.class);
@@ -117,6 +116,7 @@ public class DashboardFragment extends Fragment {
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(bundle);
 
+        // se encarga de cambiar los fragments
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, detailFragment)

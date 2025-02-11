@@ -77,6 +77,9 @@ public class DashboardRepository {
     public void cleanup() {
         if (valueEventListener != null) {
             firebaseDatabase.getReference("planes").removeEventListener(valueEventListener);
+            valueEventListener = null;
         }
+        planesLiveData.setValue(null);
+        errorLiveData.setValue(null);
     }
 }
