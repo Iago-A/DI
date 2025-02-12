@@ -14,7 +14,7 @@
             android:layout_margin="16dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_settings_24" />
+            app:srcCompat="@drawable/baseline_person_24" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/favoritesListFab"
