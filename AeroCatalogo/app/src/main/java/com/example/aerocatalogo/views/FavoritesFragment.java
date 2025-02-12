@@ -1,8 +1,11 @@
 package com.example.aerocatalogo.views;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,18 +17,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class FavoritesActivity extends AppCompatActivity {
+public class FavoritesFragment extends Fragment {
     private FavoritesViewModel favoritesViewModel;
     private FavoritesAdapter adapter;
 
+    // Constructor vacío
+    public FavoritesFragment() {}
+
+    // Se infla el layout del fragment
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Infla el layout del fragment
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         // Configurar RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.recyclerFavorites);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerFavorites);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         // Inicializar adapter con lista vacía
         adapter = new FavoritesAdapter(new ArrayList<>());
@@ -35,19 +42,21 @@ public class FavoritesActivity extends AppCompatActivity {
         favoritesViewModel = new ViewModelProvider(this).get(FavoritesViewModel.class);
 
         // Obtener referencias de las vistas
-        FloatingActionButton returnFab = findViewById(R.id.returnFab);
+        FloatingActionButton returnFab = view.findViewById(R.id.returnFab);
 
         // Establecer descripciones de accesibilidad.
         returnFab.setContentDescription("Volver");
 
         // Configurar botón volver
         returnFab.setOnClickListener(v -> {
-            finish();
+            requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         // Observar cambios en la lista de aviones
-        favoritesViewModel.getFavorites().observe(this, favorites ->
+        favoritesViewModel.getFavorites().observe(getViewLifecycleOwner(), favorites ->
                 adapter.updateFavorites(favorites)
         );
+
+        return view;
     }
 }

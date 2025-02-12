@@ -52,13 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getErrorMessage().observe(this, errorMessage -> {
             if (errorMessage != null) {
                 Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+
+                // Reseteamos el error para evitar que se dispare al recrear la actividad
+                loginViewModel.resetLoginError();
             }
         });
 
         loginViewModel.isLoginSuccessful().observe(this, isSuccessful -> {
             if (isSuccessful != null && isSuccessful) {
                 Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
 
                 // Reseteamos el estado para evitar que se dispare al recrear la actividad

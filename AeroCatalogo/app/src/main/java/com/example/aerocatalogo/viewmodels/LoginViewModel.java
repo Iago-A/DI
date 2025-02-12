@@ -45,5 +45,9 @@ public class LoginViewModel extends ViewModel {
     public void resetLoginState() {
         isLoginSuccessful.setValue(null);
     }
+
+    public void resetLoginError() {
+        errorMessage.setValue(null);
+    }
 }
 
