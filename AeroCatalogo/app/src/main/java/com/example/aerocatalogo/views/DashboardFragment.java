@@ -106,6 +106,7 @@ public class DashboardFragment extends Fragment {
         return view;
     }
 
+    // El bundle almacena pares clave valor
     private void openDetailFragment(Plane plane) {
         Bundle bundle = new Bundle();
         bundle.putString("plane_title", plane.getTitle());

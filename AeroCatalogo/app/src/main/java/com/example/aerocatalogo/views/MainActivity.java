@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 openFragment(new DashboardFragment());
             } else if (id == R.id.nav_favorites) {
                 openFragment(new FavoritesFragment()); // Permite regresar al fragmento anterior con el botón atrás
+            } else if (id == R.id.nav_random) {
+                openFragment(new RandomFragment()); // Permite regresar al fragmento anterior con el botón atrás
             } else if (id == R.id.nav_profile) {
                 openFragment(new ProfileFragment()); // Permite regresar al fragmento anterior con el botón atrás
             } else if (id == R.id.nav_logout) {
