@@ -14,13 +14,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardRepository {
+public class RandomRepository {
     private final FirebaseDatabase firebaseDatabase;
     private final MutableLiveData<List<Plane>> planesLiveData;
     private final MutableLiveData<String> errorLiveData;
     private ValueEventListener valueEventListener;
 
-    public DashboardRepository() {
+    public RandomRepository() {
         firebaseDatabase = FirebaseDatabase.getInstance(); // Asegúrate de inicializar Firebase en tu app.
         planesLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
